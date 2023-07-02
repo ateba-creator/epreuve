@@ -11,3 +11,17 @@ body {
 .dz:hover {
     background-color: aliceblue !important;
 }
+
+.badge {
+    padding:6px;
+    width:80px;
+}
+.badge-danger{
+    border: 1px solid #bb2736;
+    background-color:#dc3545;
+}
+
+.badge-success{
+    border: 1px solid #018152;
+    background-color: #009d63;
+}

@@ -1,5 +1,6 @@
 {% extends 'pages/dashboard.html' %}
 {% block corps %}
+{% load widget_tweaks %}
 
 {% block orders %}
 
@@ -10,7 +11,7 @@
 
   
   <!-- Modal -->
-   <form method="POST" >
+   <form method="POST"  enctype="multipart/form-data">
     {% csrf_token %}
   <div class="modal fade" id="exampleModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
     <div class="modal-dialog" role="document">
@@ -24,12 +25,12 @@
         <div class="modal-body">
          
             <label for=""> uniquement fichier .zip ; max 100Mo</label> <br><br>
-            <input name="file" type="file">
+            <input type="file" accept=".zip,.pdf,.rar" name="filename" class="form-control">
         
         </div>
         <div class="modal-footer">
-          <input type="submit"  class="btn btn-secondary" value="envoyer" >
-          <button type="button" class="btn btn-primary">Save changes</button>
+          <input type="submit"  class="btn btn-primary" value="Enregistrer" >
+          <button type="button" data-bs-dismiss="modal" aria-label="Close" class="btn btn-secondary">Annuler</button>
           
         </div>
       </div>
@@ -37,6 +38,11 @@
   </div>
         
   </form>
+
+
+
+
+
 
         <a class="col-md-3" style="text-decoration:none;"href="#" data-bs-toggle="modal" data-bs-target="#exampleModalLong">
             <div class="p-3 bg-white shadow-sm d-flex justify-content-around align-items-center rounded">
@@ -53,91 +59,74 @@
 
     {% block table %}
 
+    </form>
+
+    {% for message in messages %}
+    <div class="alert {{ message.tags }} alert-dismissible" role="alert">
+        {{ message }}
+    </div>
+    {% endfor %}
+
     <div class="row my-5">
-        <h3 class="fs-4 mb-3">Status epreuves</h3>
+        <h3 class="fs-4 mb-3">Statut epreuves</h3>
         <div class="col">
             <table class="table bg-white rounded shadow-sm  table-hover">
                 <thead>
                     <tr>
                         <th scope="col" width="50">#</th>
-                        <th scope="col">Product</th>
-                        <th scope="col">Customer</th>
-                        <th scope="col">Price</th>
+                        <th scope="col">Noms des Epreuves</th>
+                        <th>Statuts</th>
+                        <th scope="col">Date de publication</th>
+                        <th scope="col">Prix</th>
                     </tr>
                 </thead>
                 <tbody>
+                    {% for paper in epreuves %}
                     <tr>
-                        <th scope="row">1</th>
-                        <td>Television</td>
-                        <td>Jonny</td>
-                        <td>$1200</td>
+                        <th scope="row">{{forloop.counter}}</th>
+                        <td>{{paper.filename}}</td>
+                        <td>
+                            {% if paper.is_valid %}
+                                <span class="badge badge-success">validée</span>
+                            {% else %}
+                                <span class="badge badge-danger">non validé</span>
+                            {% endif %}
+
+                        </td>
+                        <td>{{paper.date}}</td>
+                        <td>
+                            <a href="#" data-bs-toggle="modal" data-bs-target="#delete_paper_{{paper.id}}">
+                                <i class="fa-solid fa-trash text-danger"></i>
+                            </a>
+
+                            <div class="modal fade" id="delete_paper_{{paper.id}}" tabindex="-1" role="dialog" aria-labelledby="delete_paper" aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                  <div class="modal-content">
+                                    <div class="modal-header">
+                                      <h5 class="modal-title" id="exampleModalLongTitle">Souhaitez vous vraiment supprimmer cette epreuve ?</h5>
+                                      <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                      </button>
+                                    </div>
+                                    <div class="modal-body text-center">
+                                     
+                                        <label for="">{{paper.filename}}</label> <br><br>
+                                        <label for="">{{paper.date}}</label> <br><br>
+                                    
+                                    </div>
+                                    <div class="modal-footer">
+                                      <a href="{% url 'deletePaper' paper.id %}"  class="btn btn-danger">Suprimmer</a>
+                                      <button type="button" data-bs-dismiss="modal" aria-label="Close" class="btn btn-secondary">Annuler</button>
+                                      
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+
+                        </td>
                     </tr>
-                    <tr>
-                        <th scope="row">2</th>
-                        <td>Laptop</td>
-                        <td>Kenny</td>
-                        <td>$750</td>
-                    </tr>
-                    <tr>
-                        <th scope="row">3</th>
-                        <td>Cell Phone</td>
-                        <td>Jenny</td>
-                        <td>$600</td>
-                    </tr>
-                    <tr>
-                        <th scope="row">4</th>
-                        <td>Fridge</td>
-                        <td>Killy</td>
-                        <td>$300</td>
-                    </tr>
-                    <tr>
-                        <th scope="row">5</th>
-                        <td>Books</td>
-                        <td>Filly</td>
-                        <td>$120</td>
-                    </tr>
-                    <tr>
-                        <th scope="row">6</th>
-                        <td>Gold</td>
-                        <td>Bumbo</td>
-                        <td>$1800</td>
-                    </tr>
-                    <tr>
-                        <th scope="row">7</th>
-                        <td>Pen</td>
-                        <td>Bilbo</td>
-                        <td>$75</td>
-                    </tr>
-                    <tr>
-                        <th scope="row">8</th>
-                        <td>Notebook</td>
-                        <td>Frodo</td>
-                        <td>$36</td>
-                    </tr>
-                    <tr>
-                        <th scope="row">9</th>
-                        <td>Dress</td>
-                        <td>Kimo</td>
-                        <td>$255</td>
-                    </tr>
-                    <tr>
-                        <th scope="row">10</th>
-                        <td>Paint</td>
-                        <td>Zico</td>
-                        <td>$434</td>
-                    </tr>
-                    <tr>
-                        <th scope="row">11</th>
-                        <td>Carpet</td>
-                        <td>Jeco</td>
-                        <td>$1236</td>
-                    </tr>
-                    <tr>
-                        <th scope="row">12</th>
-                        <td>Food</td>
-                        <td>Haso</td>
-                        <td>$422</td>
-                    </tr>
+                    {% endfor %}
+                   
                 </tbody>
             </table>
         </div>
