@@ -26,6 +26,7 @@
 
           <div class="modal-footer">
             <button type="button" data-bs-dismiss="modal" aria-label="Close" class="btn btn-secondary">Fermer</button>    
+            <a href="#" onclick="reloadPage()"  class="btn btn-primary">Enregistrer</a>
           </div>
        
       </div>
@@ -138,9 +139,9 @@
       
   });
 
-  myDropzone.on("queuecomplete", function (file) {
+  function reloadPage(){
     location.reload();
-});
+  }
 
   </script>
 
