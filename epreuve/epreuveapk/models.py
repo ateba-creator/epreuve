@@ -1,17 +1,8 @@
 from django.db import models
-
+import os
+from epreuve import settings
 # Create your models here.
 
-# class FichierZip(models.Model):
-#     file=models.FileField(upload_to='zipfile')
-#     date = models.DateTimeField( auto_now_add=True)
-
-#     class Meta:
-#         ordering=['-date']
-
-#     def __str__(self):
-#         return str(self.date)
-    
 
 class zipFile(models.Model):
     filename=models.FileField(upload_to='zip_files',unique=True)
@@ -22,10 +13,9 @@ class zipFile(models.Model):
         ordering=['-date']
 
     def __str__(self):
-        return str(self.date)
+        return str(self.filename) + str(self.date)
     
+    def delete(self, *args, **kwargs):
+        os.remove(os.path.join(settings.MEDIA_ROOT, str(self.filename)))
+        super(zipFile,self).delete(*args,**kwargs)
     
-# class Fichierzip(models.Model):
-#     date = models.DateTimeField(auto_now_add=True)
-#     file = models.FileField(upload_to='zipfile')
-#     nom_doc = models.CharField(max_length=50)

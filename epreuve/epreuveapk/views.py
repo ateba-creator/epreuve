@@ -21,25 +21,24 @@ def dashboard(request):
 
 def checkFileExist(filename):
     for file in zipFile.objects.all():
-        print(str(file.filename))
         if str(file.filename) == filename:
             print("file exist")
             return True
     return False
     
 def addEpreuve(request):
-    if request.method == 'POST' and request.FILES['filename']:
-        myfile = request.FILES['filename']
-        # fs = FileSystemStorage()
+    if request.method == 'POST' and request.FILES['file']:
+        myfile = request.FILES['file']
         
         if(checkFileExist('zip_files/'+ str(myfile))):
             messages.warning(request,"L'epreuve "+str(myfile)+" existe deja dans la base de donnee")
+            
         else:
             try:
                 newFile = zipFile.objects.create(filename=myfile)
                 newFile.save()
                 messages.success(request,"Epreuve ajoutee avec succes !")
-
+            
             except Exception as e:
                 messages.error(request,e)
 
